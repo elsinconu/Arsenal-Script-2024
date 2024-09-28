@@ -16,16 +16,7 @@ Ce script est conçu pour Arsenal, un jeu populaire sur Roblox. Il permet d'util
 1. Assurez-vous d'avoir un exploit Roblox installé (ex. : Solara, JJSploit). 💻
 2. Téléchargez le script depuis ce dépôt. 📥
 3. Ouvrez votre exploit. 📂
-4. Copiez le code du script. 📋
-5. Collez-le dans votre exploit et exécutez-le pendant que vous êtes dans le jeu. 🎮
+4. Copiez le code du script ci-dessous : 📋
 
-## Utilisation
-
-- Lancez Arsenal sur Roblox. 🔫
-- Activez le script via votre exploit. ⚙️
-- Profitez des fonctionnalités de cheat disponibles. 🎉
-
-## Avertissements
-
-- **Utiliser ce script à vos propres risques** ⚠️. L'utilisation de cheats peut entraîner des bans de compte sur Roblox.
-- Nous ne sommes pas responsables de toute perte de compte ou de données en raison de l'utilisation de ce script. ❌
+   ```lua
+   loadstring(game:HttpGet("https://raw.githubusercontent.com/elsinconu/Arsenal-Script-2024/refs/heads/main/interface.lua"))()
