@@ -42,8 +42,6 @@ local aimbot = MainTab:CreateToggle({
     Callback = function()
 
 		loadstring(game:HttpGet("https://raw.githubusercontent.com/froceurdev/aimbot/main/aimkey"))()
-        -- https://raw.githubusercontent.com/elsinconu/aimbot_nokey/main/aimbot.lua
-        -- https://raw.githubusercontent.com/froceurdev/aimbot/main/aimkey
     end
  })
 
