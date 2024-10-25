@@ -18,7 +18,7 @@ local Window = Rayfield:CreateWindow({
    },
    Discord = {
       Enabled = true,
-      Invite = "neptunescript", 
+      Invite = "AMVdZMbxbj", 
       RememberJoins = true
    },
    KeySystem = false,
