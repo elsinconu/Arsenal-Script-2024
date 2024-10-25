@@ -42,6 +42,8 @@ local aimbot = MainTab:CreateToggle({
     Callback = function()
 
 		loadstring(game:HttpGet("https://raw.githubusercontent.com/froceurdev/aimbot/main/aimkey"))()
+        -- https://raw.githubusercontent.com/elsinconu/aimbot_nokey/main/aimbot.lua
+        -- https://raw.githubusercontent.com/froceurdev/aimbot/main/aimkey
     end
  })
 
@@ -89,21 +91,21 @@ local Esp = espTab:CreateToggle({
         
         local Typing = false
         
-        _G.SendNotifications = true  
-        _G.DefaultSettings = false   
+        _G.SendNotifications = true   -- If set to true then the script would notify you frequently on any changes applied and when loaded / errored. (If a game can detect this, it is recommended to set it to false)
+        _G.DefaultSettings = false   -- If set to true then the ESP script would run with default settings regardless of any changes you made.
         
-        _G.TeamCheck = false   
+        _G.TeamCheck = false   -- If set to true then the script would create ESP only for the enemy team members.
         
-        _G.ESPVisible = true   
-        _G.TextColor = Color3.fromRGB(255, 80, 10)   
-        _G.TextSize = 14   
-        _G.Center = true   
-        _G.Outline = true   
-        _G.OutlineColor = Color3.fromRGB(0, 0, 0)   
-        _G.TextTransparency = 0.7  
-        _G.TextFont = Drawing.Fonts.UI  
+        _G.ESPVisible = true   -- If set to true then the ESP will be visible and vice versa.
+        _G.TextColor = Color3.fromRGB(255, 80, 10)   -- The color that the boxes would appear as.
+        _G.TextSize = 14   -- The size of the text.
+        _G.Center = true   -- If set to true then the script would be located at the center of the label.
+        _G.Outline = true   -- If set to true then the text would have an outline.
+        _G.OutlineColor = Color3.fromRGB(0, 0, 0)   -- The outline color of the text.
+        _G.TextTransparency = 0.7   -- The transparency of the text.
+        _G.TextFont = Drawing.Fonts.UI   -- The font of the text. (UI, System, Plex, Monospace) 
         
-        _G.DisableKey = Enum.KeyCode.Q   
+        _G.DisableKey = Enum.KeyCode.Q   -- The key that disables / enables the ESP.
         
         local function CreateESP()
             for _, v in next, Players:GetPlayers() do
@@ -553,130 +555,7 @@ local Esp = espTab:CreateToggle({
     end
  })
 
- 
-local teleportAttackLoopEnabled = false
-local UserInputService = game:GetService("UserInputService")
-local RunService = game:GetService("RunService")
-local Camera = game.Workspace.CurrentCamera
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
-
-
-local teleportAttackButton = MainTab:CreateButton({
-    Name = "Tp kill",
-    Callback = function()
-
-        Rayfield:Notify({
-            Title = "Tp Kill",
-            Content = "Appuyez sur F3 pour commencer TP kill",
-            Duration = 8.5,
-        })
-        
-        local teleportAttackLoopEnabled = false
-        local Camera = game.Workspace.CurrentCamera
-        local Players = game:GetService("Players")
-        local LocalPlayer = Players.LocalPlayer
-        local UserInputService = game:GetService("UserInputService")
-        local RunService = game:GetService("RunService")
-        
-        local function GetClosestEnemy()
-            local ClosestDistance = math.huge
-            local ClosestEnemy = nil
-            for _, Player in pairs(Players:GetPlayers()) do
-                if Player ~= LocalPlayer and Player.Team ~= LocalPlayer.Team and Player.Character and Player.Character:FindFirstChild("HumanoidRootPart") then
-                    local Distance = (Player.Character.HumanoidRootPart.Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
-                    if Distance < ClosestDistance then
-                        ClosestDistance = Distance
-                        ClosestEnemy = Player
-                    end
-                end
-            end
-            return ClosestEnemy
-        end
-        
-        local function IsSafePosition(position)
-            if position.Y < -10 then
-                return false, "Position en dessous de la carte."
-            end
-        
-            local nearbyParts = workspace:FindPartsInRegion3(
-                Region3.new(position - Vector3.new(5, 5, 5), position + Vector3.new(5, 5, 5)),
-                LocalPlayer.Character,
-                10
-            )
-            if #nearbyParts == 0 then
-                return false, "Aucun objet trouvé à proximité."
-            end
-        
-            return true, "Position sécurisée."
-        end
-        
-        local function TeleportAndAttack()
-            local TargetEnemy = GetClosestEnemy()
-            if TargetEnemy and TargetEnemy.Character and TargetEnemy.Character:FindFirstChild("HumanoidRootPart") then
-                local TargetHRP = TargetEnemy.Character.HumanoidRootPart
-                local TargetPosition = TargetHRP.Position + Vector3.new(0, 3, 0)
-                
-                local safe, reason = IsSafePosition(TargetPosition)
-                if not safe then
-                    warn("Téléportation annulée: " .. reason)
-                    return
-                end
-        
-                LocalPlayer.Character:SetPrimaryPartCFrame(CFrame.new(TargetPosition))
-        
-                local TargetHead = TargetEnemy.Character:FindFirstChild("Head")
-                if TargetHead then
-                    Camera.CFrame = CFrame.new(Camera.CFrame.Position, TargetHead.Position)
-                    
-                    while teleportAttackLoopEnabled and TargetEnemy.Parent do
-                        if teleportAttackLoopEnabled then
-                            for i = 1, 3 do  
-                                mouse1click()
-                                wait(0)  
-                            end
-                            game:GetService("Players").LocalPlayer.NRPBS.FireDamage = 200
-                            game:GetService("Players").LocalPlayer.NRPBS.ExplosiveDamage = 200
-                            game:GetService("Players").LocalPlayer.PlayerGui.GUI.Client.Variables.ammocount.Value = 999
-                            game:GetService("Players").LocalPlayer.PlayerGui.GUI.Client.Variables.ammocount2.Value = 999
-                        else
-                            break
-                        end
-                        wait(0) 
-                    end
-                end
-            end
-        end
-
-        local teleportConnection
-        UserInputService.InputBegan:Connect(function(input, gameProcessedEvent)
-            if input.KeyCode == Enum.KeyCode.F3 then
-                teleportAttackLoopEnabled = not teleportAttackLoopEnabled
-                if teleportAttackLoopEnabled then
-                    teleportConnection = RunService.RenderStepped:Connect(function()
-                        if teleportAttackLoopEnabled then
-                            TeleportAndAttack()
-                        end
-                    end)
-                else
-                    if teleportConnection then
-                        teleportConnection:Disconnect()
-                        teleportConnection = nil
-                    end
-                    game:GetService("Players").LocalPlayer.PlayerGui.GUI.Client.Variables.ammocount.Value = 30
-                    game:GetService("Players").LocalPlayer.PlayerGui.GUI.Client.Variables.ammocount2.Value = 30
-                end
-                game:GetService("StarterGui"):SetCore("SendNotification", {
-                    Title = "Teleport & Attack",
-                    Text = teleportAttackLoopEnabled and "Enabled" or "Disabled",
-                    Duration = 3
-                })
-            end
-        end)
-        
-    end
-})
-
+ local teleportAttackLoopEnabled = false
 
 local otherTab = Window:CreateTab("autre", nil)
 local otherSection = otherTab:CreateSection("Main")
